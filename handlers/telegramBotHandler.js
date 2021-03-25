@@ -15,7 +15,7 @@ module.exports = {
         var user_priceTo = reqBody.priceTo ? reqBody.priceTo : "no data";
         var user_date = reqBody.date ? reqBody.date : new Date(Date.now);
 
-        return `Данные клиента: \nИмя: ${user_name} \nEmail: ${user_email} \nТелефон: ${user_phone} \nIP адрес: ${user_ip} \nСтрана: ${user_country} \nГород: ${user_city} \nЖивотное: ${user_animal} \nСообщение: ${user_message} \nОжидаемая клиентом цена: от ${user_priceFrom} до ${user_priceTo}\nВремя запроса: ${user_date}`
+        return `Данные клиента: \nИмя: ${user_name} \nEmail: ${user_email} \nТелефон: ${user_phone} \nIP адрес: ${user_ip} \nСтрана: ${user_country} \nГород: ${user_city} \nЖивотное: ${user_animal} \nСообщение: ${user_message} \nОжидаемая цена: от ${user_priceFrom} до ${user_priceTo}\nВремя запроса: ${user_date}`
     },
     SendMessageToTelegram: function (message) {
         bot.sendMessage(process.env.TG_CHAT_ID, message);

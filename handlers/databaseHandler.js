@@ -20,7 +20,7 @@ module.exports = {
             country: data.country ? data.country : "no data",
             city: data.city ? data.city : "no data",
             animal: data.animal ? data.animal : "no data",
-            date: data.dateRaw ? data.dateRaw : "no data"
+            date: data.date ? data.date : new Date()
         });
     }
 }
