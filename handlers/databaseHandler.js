@@ -1,26 +1,31 @@
 const mongoose = require('mongoose');
-const ClientPostModel = require('../models/ClientModel.js')
+const ClientPostModel = require('../models/ClientDBModel.js');
+const SessionType = require('./userSessionHandler.js');
 
-mongoose.connect(process.env.DB_CONNECTION,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => {
-        console.log('connected to db')
-    });
-
-module.exports = {
-    SaveClientToDB: function (clientSchema) {
-        return clientSchema.save();
-    },
-    CreatePostModel: function (data) {
-        return new ClientPostModel({
-            name: data.name ? data.name : "no data",
-            email: data.email ? data.email : "no data",
-            phone: data.phone ? data.phone : "no data",
-            ip: data.ip ? data.ip : "no data",
-            country: data.country ? data.country : "no data",
-            city: data.city ? data.city : "no data",
-            animal: data.animal ? data.animal : "no data",
-            date: data.date ? data.date : new Date()
+var ConnectToDB = () => {
+    let dbLink =  SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.DB_CONNECTION_DEBUG : process.env.DB_CONNECTION;
+    mongoose.connect(dbLink,
+        { useNewUrlParser: true, useUnifiedTopology: true },
+        () => {
+            console.log('connected to db')
         });
-    }
-}
+};
+
+var SaveClientToDB = (clientPostModel) => {
+    return clientPostModel.save();
+};
+
+var CreatePostModel = (clientModel) => {
+    return new ClientPostModel({
+        name: clientModel.name,
+        email: clientModel.email,
+        phone: clientModel.phone,
+        ip: clientModel.ip,
+        country: clientModel.country,
+        city: clientModel.city,
+        animal: clientModel.animal,
+        date: clientModel.dateFull
+    });
+};
+
+module.exports = {ConnectToDB, SaveClientToDB, CreatePostModel};

@@ -1,23 +1,20 @@
+const SessionType = require('./userSessionHandler.js');
+
 const TelegramBot = require('node-telegram-bot-api');
-const bot = new TelegramBot(process.env.TG_TOKEN, { polling: true });
+var bot, chatId;
 
-module.exports = {
-    FormMessageToSend: function (reqBody) {
-        var user_name = reqBody.name ? reqBody.name : "no data";
-        var user_email = reqBody.email ? reqBody.email : "no data";
-        var user_phone = reqBody.phone ? reqBody.phone : "no data";
-        var user_ip = reqBody.ip ? reqBody.ip : "no data";
-        var user_country = reqBody.country ? reqBody.country : "no data";
-        var user_city = reqBody.city ? reqBody.city : "no data";
-        var user_animal = reqBody.animal ? reqBody.animal : "no data";
-        var user_message = reqBody.message ? reqBody.message : "no data";
-        var user_priceFrom = reqBody.priceFrom ? reqBody.priceFrom : "no data";
-        var user_priceTo = reqBody.priceTo ? reqBody.priceTo : "no data";
-        var user_date = reqBody.date ? reqBody.date : new Date(Date.now);
+var LaunchBot = () => {
+    let botToken = SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.TG_TOKEN_DEBUG : process.env.TG_TOKEN;
+    chatId =  SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.TG_CHAT_ID_DEBUG : process.env.TG_CHAT_ID;
+    bot = new TelegramBot(botToken, { polling: true });
+};
 
-        return `Данные клиента: \nИмя: ${user_name} \nEmail: ${user_email} \nТелефон: ${user_phone} \nIP адрес: ${user_ip} \nСтрана: ${user_country} \nГород: ${user_city} \nЖивотное: ${user_animal} \nСообщение: ${user_message} \nОжидаемая цена: от ${user_priceFrom} до ${user_priceTo}\nВремя запроса: ${user_date}`
-    },
-    SendMessageToTelegram: function (message) {
-        bot.sendMessage(process.env.TG_CHAT_ID, message);
-    }
-}
+var FormMessageToSend = (clientModel) => {
+    return `Данные клиента: \nИмя: ${clientModel.name} \nEmail: ${clientModel.email} \nТелефон: ${clientModel.phone} \nСайт: ${clientModel.site} \nIP адрес: ${clientModel.ip} \nСтрана: ${clientModel.country} \nГород: ${clientModel.city} \nРайон: ${clientModel.district} \nЖивотное: ${clientModel.animal} \nСообщение: ${clientModel.message} \nОжидаемая цена: от ${clientModel.priceFrom} до ${clientModel.priceTo}\nВремя запроса: ${clientModel.dateFull}`
+};
+
+var SendMessageToTelegram = (message) => {
+    bot.sendMessage(chatId, message);
+};
+
+module.exports = {LaunchBot, FormMessageToSend, SendMessageToTelegram};
