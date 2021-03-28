@@ -16,15 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 var SetUpHandlers = () => {
-  SessionType.SetCurrentSessionType(SessionType.UserSession.Debug);
+  SessionType.SetCurrentSessionType(SessionType.UserSession.User);
   TelegramBotHandler.LaunchBot();
   DatabaseHandler.ConnectToDB();
 };
 SetUpHandlers();
-
-app.get('/', (req, res) => {
-  res.send("TEST");
-});
 
 app.post('/login', async (req, res) => {
   try {
