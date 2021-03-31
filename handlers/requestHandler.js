@@ -19,4 +19,4 @@ var CheckIfIpBlocked = (requestIp) => {
   return false;
 };
 
-module.exports = {CheckIfDomainAllowed, CheckIfIpBlocked};
+module.exports = { CheckIfDomainAllowed, CheckIfIpBlocked };

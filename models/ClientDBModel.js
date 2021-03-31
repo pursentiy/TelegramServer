@@ -13,4 +13,4 @@ const ClientDBSchema = mongoose.Schema({
     date: Date
 });
 
-module.exports = mongoose.model('Clients', ClientDBSchema);
+var Client = mongoose.model('Clients', ClientDBSchema);

@@ -1,4 +1,4 @@
-const SessionType = require('./userSessionHandler.js');
+const SessionType = require('./UserSessionHandler.js');
 const TelegramBot = require('node-telegram-bot-api');
 var bot, chatId;
 
