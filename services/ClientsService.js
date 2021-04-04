@@ -1,0 +1,34 @@
+const GlobalParamsService = require('./GlobalParamsService');
+const ClientModelRef = require('../models/ClientModel.js');
+const ClientModel = ClientModelRef.ClientModel;
+let ClientsList = [];
+
+const AddNewClient = (client => ClientsList.push(client));
+
+const UpdateClientsList = (() =>{
+    if(ClientsList.length === 0){
+        return;
+    }
+    let currentTime = Date.now();
+    let newClientsList = ClientsList.filter(client => {
+        let deltaTime = (currentTime - client.dateRaw) / 1000;
+        if(deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds){
+            return client;
+        }
+    });
+    ClientsList.length = 0;
+    ClientsList = newClientsList.slice();
+});
+
+const IfClientCooldownTimeOver = (newClient => {
+    if(ClientsList.length === 0){
+        return true;
+    }
+    return checkCooldownResult = !ClientsList.some(client => {
+        if (client.ip === newClient.ip) {
+            return true;
+        }
+    });
+})
+
+module.exports = {IfClientCooldownTimeOver, UpdateClientsList, AddNewClient};

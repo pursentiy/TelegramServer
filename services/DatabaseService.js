@@ -1,24 +1,44 @@
 const DatabaseHandler = require('../handlers/DatabaseHandler.js');
 const GlobalParamsService = require('./GlobalParamsService');
 
-var IfCooldownOver = (ipAdress, date) => {
+const IfCooldownOver = (dateNow, ipAdress) => {
     return new Promise((resolve, reject) => {
-        DatabaseHandler.ClientModel.find({ip: ipAdress}, null, {sort: {date: -1}}, (err, result) => {
-            var deltaTime;
+        DatabaseHandler.ClientModel.find(null, null, {sort: {date: -1}}, (err, result) => {
             if (err) {
                 console.log(err);
                 reject();
             }
             if (result && result.length > 0) {
-                deltaTime = (Date.parse(date) - Date.parse(result[0].date)) / 1000;
-                if (GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds < deltaTime) {
+                let parsedClientTime = Date.parse(dateNow);
+                let timeCheckIndex = result.findIndex((elem, index) =>{
+                    let deltaTime = (parsedClientTime - Date.parse(elem.date)) / 1000;
+                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds) {
+                        return true;
+                    }
+                    else if(index === 0){
+                    }
+                })
+                let timeSortedResult = result.filter(elem => {
+                    let deltaTime = (parsedClientTime - Date.parse(elem.date)) / 1000;
+                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds) {
+                        return elem;
+                    }
+                });
+
+                if (timeSortedResult.length === 0) {
                     resolve();
                 }
-                else{
-                    reject(GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds - deltaTime);
+
+                let isIpIncluded = timeSortedResult.some(elem => elem.ip === ipAdress);
+
+                if (isIpIncluded) {
+                    reject();
+                }
+                else {
+                    resolve();
                 }
             }
-            else{
+            else {
                 resolve();
             }
         });
