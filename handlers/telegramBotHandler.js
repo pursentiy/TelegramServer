@@ -1,8 +1,8 @@
 const SessionType = require('./UserSessionHandler.js');
 const TelegramBot = require('node-telegram-bot-api');
-var bot, chatId;
+let bot, chatId;
 
-var LaunchBot = () => {
+const LaunchBot = () => {
     let botToken = SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.TG_TOKEN_DEBUG : process.env.TG_TOKEN;
     chatId =  SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.TG_CHAT_ID_DEBUG : process.env.TG_CHAT_ID;
     bot = new TelegramBot(botToken, { polling: true });

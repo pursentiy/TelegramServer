@@ -7,7 +7,7 @@ const UserSession = {
     CurrentType: ""
 }
 
-var SetCurrentSessionType = (userSessionType) => {
+const SetCurrentSessionType = (userSessionType) => {
     UserSession.current = userSessionType;
 }
 

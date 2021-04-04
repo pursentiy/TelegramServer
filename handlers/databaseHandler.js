@@ -14,9 +14,9 @@ const ClientDBSchema = mongoose.Schema({
     date: Date
 });
 
-var ClientModel = mongoose.model('Clients', ClientDBSchema);
+const ClientModel = mongoose.model('Clients', ClientDBSchema);
 
-var ConnectToDB = () => {
+const ConnectToDB = () => {
     let dbLink = SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.DB_CONNECTION_DEBUG : process.env.DB_CONNECTION;
     mongoose.connect(dbLink,
         { useNewUrlParser: true, useUnifiedTopology: true },
@@ -25,11 +25,11 @@ var ConnectToDB = () => {
         });
 };
 
-var SaveClientToDB = (clientPostModel) => {
+const SaveClientToDB = (clientPostModel) => {
     return clientPostModel.save();
 };
 
-var CreatePostModel = (clientModel) => {
+const CreatePostModel = (clientModel) => {
     return new ClientModel({
         name: clientModel.name,
         email: clientModel.email,
