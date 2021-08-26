@@ -1,5 +1,5 @@
 const UserSession = {
-    set current(type) {
+    set Current(type) {
         this.CurrentType = type;
     },
     User: "user",
@@ -8,7 +8,7 @@ const UserSession = {
 }
 
 const SetCurrentSessionType = (userSessionType) => {
-    UserSession.current = userSessionType;
+    UserSession.Current = userSessionType;
 }
 
 module.exports = {

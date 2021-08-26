@@ -12,7 +12,7 @@ const IfCooldownOver = (dateNow, ipAdress) => {
                 let parsedClientTime = Date.parse(dateNow);
                 let timeCheckIndex = result.findIndex((elem, index) =>{
                     let deltaTime = (parsedClientTime - Date.parse(elem.date)) / 1000;
-                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds) {
+                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCoolDownSeconds) {
                         return true;
                     }
                     else if(index === 0){
@@ -20,7 +20,7 @@ const IfCooldownOver = (dateNow, ipAdress) => {
                 })
                 let timeSortedResult = result.filter(elem => {
                     let deltaTime = (parsedClientTime - Date.parse(elem.date)) / 1000;
-                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds) {
+                    if (deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCoolDownSeconds) {
                         return elem;
                     }
                 });

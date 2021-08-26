@@ -12,7 +12,7 @@ const UpdateClientsList = (() =>{
     let currentTime = Date.now();
     let newClientsList = ClientsList.filter(client => {
         let deltaTime = (currentTime - client.dateRaw) / 1000;
-        if(deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCooldownSeconds){
+        if(deltaTime <= GlobalParamsService.GlobalParams.MessageReceiveCoolDownSeconds){
             return client;
         }
     });
@@ -20,7 +20,7 @@ const UpdateClientsList = (() =>{
     ClientsList = newClientsList.slice();
 });
 
-const IfClientCooldownTimeOver = (newClient => {
+const IfClientCoolDownTimeOver = (newClient => {
     if(ClientsList.length === 0){
         return true;
     }
@@ -31,4 +31,4 @@ const IfClientCooldownTimeOver = (newClient => {
     });
 })
 
-module.exports = {IfClientCooldownTimeOver, UpdateClientsList, AddNewClient};
+module.exports = {IfClientCoolDownTimeOver: IfClientCoolDownTimeOver, UpdateClientsList, AddNewClient};

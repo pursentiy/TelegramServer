@@ -1,5 +1,5 @@
 var GlobalParams = {
-    MessageReceiveCooldownSeconds: 60
+    MessageReceiveCoolDownSeconds: 60
 }
 
 module.exports = {
