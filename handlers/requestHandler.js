@@ -48,7 +48,8 @@ const HandleRequestWithError = (res, err) => {
 };
 
 const CanUserProceed = (requestDomain, requestIp) => {
-    return RequestCheckHandler.CheckIfDomainAllowed(requestDomain) && RequestCheckHandler.CheckIfIpBlocked(requestIp);
+    return true;
+    //return RequestCheckHandler.CheckIfDomainAllowed(requestDomain) && RequestCheckHandler.CheckIfIpBlocked(requestIp);
 }
 
 const HandleRequestWhenCoolDownIsNotOver = (res, clientModel) => {

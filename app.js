@@ -13,17 +13,19 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const PrepareEnvironment = () => {
-    SessionEnvironmentHandler.SetCurrentSessionType(SessionType.UserSession.Debug);
+    SessionEnvironmentHandler.SetCurrentSessionType(SessionType.UserSession.Production);
     SessionEnvironmentHandler.SetupHandlers();
 }
 
 PrepareEnvironment();
 
 app.post('/proxy-login', async (req, res) => {
+    console.log("Получены данные:", req.body); // Это покажет данные в pm2 logs
+
     if (!req.body || Object.keys(req.body).length === 0) {
-        console.error("Ошибка: Тело запроса пустое или не является JSON");
-        return res.status(400).json({ error: "Empty JSON body" });
+        return res.status(400).json({ error: "Тело пустое", received: req.body });
     }
+
     RequestHandler.HandleRequest(req, res);
 });
 
