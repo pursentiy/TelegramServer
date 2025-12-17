@@ -1,4 +1,4 @@
-const GlobalParamsService = require('./GlobalParamsService');
+const GlobalParamsService = require('./GlobalParamsService.js');
 const ClientModelRef = require('../models/ClientModel.js');
 const ClientModel = ClientModelRef.ClientModel;
 let ClientsList = [];

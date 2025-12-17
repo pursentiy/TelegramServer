@@ -1,6 +1,7 @@
+require('dotenv/config');
+
 const express = require('express');
 const cors = require('cors');
-require('dotenv/config');
 
 const SessionEnvironmentHandler = require('./handlers/SessionEnvironmentHandler.js');
 const SessionType = require('./handlers/UserSessionHandler.js');

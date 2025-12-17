@@ -1,5 +1,5 @@
-const TelegramBotHandler = require('./TelegramBotHandler');
-const DatabaseHandler = require('./databaseHandler.js');
+const TelegramBotHandler = require('./TelegramBotHandler.js');
+const DatabaseHandler = require('./DatabaseHandler.js');
 const SessionType = require('./UserSessionHandler.js');
 
 const SetupHandlers = () =>{

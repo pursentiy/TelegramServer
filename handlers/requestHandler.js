@@ -1,6 +1,6 @@
 const RequestCheckHandler = require('./RequestCheckHandler.js');
-const TelegramBotHandler = require('./TelegramBotHandler');
-const DatabaseHandler = require('./databaseHandler.js');
+const TelegramBotHandler = require('./TelegramBotHandler.js');
+const DatabaseHandler = require('./DatabaseHandler.js');
 const ClientsService = require('../services/ClientsService.js');
 const ClientModelRef = require('../models/ClientModel.js');
 
