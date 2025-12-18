@@ -1,28 +1,29 @@
 const RequestCheckHandler = require('./RequestCheckHandler.js');
-const TelegramBotHandler = require('./TelegramBotHandler.js');
+const TelegramMessageHandler = require('./TelegramMessageHandler.js');
 const DatabaseHandler = require('./DatabaseHandler.js');
 const ClientsService = require('../services/ClientsService.js');
 const ClientModelRef = require('../models/ClientModel.js');
 
 const ClientModel = ClientModelRef.ClientModel;
 
-const HandleRequest = (req, res) => {
+const HandleRequest = async (req, res) => {
     try {
-        TryHandleRequest(req, res);
+        await TryHandleRequest(req, res);
     }
     catch (err) {
         HandleRequestWithError(res, err);
     }
 }
 
-const TryHandleRequest = (req, res) => {
-
+const TryHandleRequest = async (req, res) => {
     if (!CanUserProceed(req.header('Origin'), req.ip)) {
-        res.send(`Не получилось оформить заявку. Позвоните нам по телефону.`);
+        res.json({
+            success: false,
+            message: `Ошибка в отправке заявки. Позвоните, пожалуйста, нам по телефону.`
+        });
         return;
     }
 
-    console.log(`REQ.IP is: ${req.ip}, HEADER is: ${req.header('Origin')}`);
     let clientModel = new ClientModel(req.body);
     ClientsService.UpdateClientsList();
 
@@ -31,11 +32,12 @@ const TryHandleRequest = (req, res) => {
         return;
     }
 
-    FinishRequestProcessing(clientModel, res, req);
+    await FinishRequestProcessing(clientModel, res, req);
 }
 
-const PrecessMessageInTelegram = (clientModel) => {
-    TelegramBotHandler.SendMessageToTelegram(TelegramBotHandler.FormMessageToSend(clientModel));
+const PrecessMessageInTelegram = async (clientModel) => {
+    const message = TelegramMessageHandler.FormMessageToSend(clientModel);
+    return await TelegramMessageHandler.SendMessageToTelegram(message);
 };
 
 const SaveClientToDB = (clientModel) => {
@@ -43,26 +45,46 @@ const SaveClientToDB = (clientModel) => {
 };
 
 const HandleRequestWithError = (res, err) => {
-    res.send(`Произошла ошибка. Попробуйте позже или позвоните нам по телефону`);
+    res.json({
+        success: false,
+        message: `Произошла ошибка. Попробуйте позже или позвоните нам по телефону`
+    });
+
     console.log(`Unexpected LOGIN error: ${err}`)
 };
 
 const CanUserProceed = (requestDomain, requestIp) => {
-    return true;
-    //return RequestCheckHandler.CheckIfDomainAllowed(requestDomain) && RequestCheckHandler.CheckIfIpBlocked(requestIp);
+    return RequestCheckHandler.CheckIfDomainAllowed(requestDomain) && RequestCheckHandler.CheckIfIpBlocked(requestIp);
 }
 
 const HandleRequestWhenCoolDownIsNotOver = (res, clientModel) => {
-    res.send(`${clientModel.name}, вы превысили число обращений. Вы сможете повторно оставить заявку менее через минуту, либо же позвоните нам по телефону.`);
+
+    res.json({
+        success: false,
+        message: `${clientModel.name}, вы превысили число обращений. Вы сможете повторно оставить заявку менее через минуту, либо же позвоните нам по телефону.`
+    });
+
     console.log(`Cooldown for ${clientModel.ip}is not over`);
 }
 
-
-const FinishRequestProcessing = (clientModel, res, req) => {
+const FinishRequestProcessing = async (clientModel, res, req) => {
     ClientsService.AddNewClient(clientModel);
-    PrecessMessageInTelegram(clientModel);
+    
+    const isTelegramSent = await PrecessMessageInTelegram(clientModel);
+    
     SaveClientToDB(clientModel);
-    res.send(`${req.body.name}, ваша заявка принята, спасибо.`);
+
+    if (isTelegramSent) {
+        res.json({
+            success: true,
+            message: `${req.body.name}, ваша заявка принята, спасибо!`
+        });
+    } else {
+        res.json({
+            success: false,
+            message: `К сожалению, сервис уведомлений временно недоступен. Пожалуйста, свяжитесь с нами по телефону.`
+        });
+    }
 }
 
 module.exports = { HandleRequest };

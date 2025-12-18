@@ -20,8 +20,6 @@ const PrepareEnvironment = () => {
 PrepareEnvironment();
 
 app.post('/proxy-login', async (req, res) => {
-    console.log("Получены данные:", req.body); // Это покажет данные в pm2 logs
-
     if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({ error: "Тело пустое", received: req.body });
     }

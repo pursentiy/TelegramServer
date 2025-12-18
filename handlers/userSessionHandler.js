@@ -3,7 +3,7 @@ const UserSession = {
         this.CurrentType = type;
     },
     User: "user",
-    Debug: "debug",
+    Production: "production",
     CurrentType: ""
 }
 

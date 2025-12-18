@@ -17,7 +17,8 @@ const ClientDBSchema = mongoose.Schema({
 const ClientModel = mongoose.model('Clients', ClientDBSchema);
 
 const ConnectToDB = () => {
-    let dbLink = SessionType.UserSession.CurrentType == SessionType.UserSession.Debug ? process.env.DB_CONNECTION_DEBUG : process.env.DB_CONNECTION;
+    let dbLink = SessionType.UserSession.CurrentType == SessionType.UserSession.Production ? process.env.DB_CONNECTION : process.env.DB_CONNECTION_DEBUG;
+
     mongoose.connect(dbLink,
         { useNewUrlParser: true, useUnifiedTopology: true },
         () => {

@@ -1,9 +1,9 @@
-const TelegramBotHandler = require('./TelegramBotHandler.js');
+const TelegramMessageHandler = require('./TelegramMessageHandler.js');
 const DatabaseHandler = require('./DatabaseHandler.js');
 const SessionType = require('./UserSessionHandler.js');
 
 const SetupHandlers = () =>{
-    TelegramBotHandler.LaunchBot();
+    TelegramMessageHandler.LaunchBot();
     DatabaseHandler.ConnectToDB();
 }
 
