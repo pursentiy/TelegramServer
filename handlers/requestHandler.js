@@ -41,7 +41,9 @@ const PrecessMessageInTelegram = async (clientModel) => {
 };
 
 const SaveClientToDB = (clientModel) => {
-    DatabaseHandler.SaveClientToDB(DatabaseHandler.CreatePostModel(clientModel));
+    DatabaseHandler.SaveClientToDB(DatabaseHandler.CreatePostModel(clientModel))
+        .then(() => console.log("Запись в БД сохранена"))
+        .catch(err => console.error("БД не сохранила, но идем дальше:", err.message));
 };
 
 const HandleRequestWithError = (res, err) => {

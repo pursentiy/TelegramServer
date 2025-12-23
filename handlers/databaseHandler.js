@@ -17,13 +17,18 @@ const ClientDBSchema = mongoose.Schema({
 const ClientModel = mongoose.model('Clients', ClientDBSchema);
 
 const ConnectToDB = () => {
-    let dbLink = SessionType.UserSession.CurrentType == SessionType.UserSession.Production ? process.env.DB_CONNECTION : process.env.DB_CONNECTION_DEBUG;
+    let dbLink = SessionType.UserSession.CurrentType == SessionType.UserSession.Production 
+        ? process.env.DB_CONNECTION 
+        : process.env.DB_CONNECTION;
 
-    mongoose.connect(dbLink,
-        { useNewUrlParser: true, useUnifiedTopology: true },
-        () => {
-            console.log('connected to db');
-        });
+    // Добавляем обработку ошибок через .then/.catch или параметры
+    mongoose.connect(dbLink, { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000 // Не ждать больше 5 секунд
+    })
+    .then(() => console.log('УСПЕХ: Подключено к MongoDB Atlas'))
+    .catch(err => console.error('ОШИБКА МОНГО:', err.message));
 };
 
 const SaveClientToDB = (clientPostModel) => {
